@@ -32,10 +32,10 @@ Options for this extension are listed as below:
 | option          | default   | format  | description                                                  |
 | --------------- | --------- | ------- | ------------------------------------------------------------ |
 | `text`          | Watermark | all     | Watermark text, single line supported only.                  |
-| `font-scale`    | 1.0       | all     | Watermark text font scale of document base font size. Value should be up to two decimal places. e.g. `font-scale = 1.5` and document base font size is 10pt, then the font size of watermark text will be 15pt. |
+| `scale`         | 1.0       | all     | Watermark text font scale of document base font size. Value should be up to two decimal places. e.g. `scale: 1.5` and document base font size is 10pt, then the font size of watermark text will be 15pt. |
 | `angle`         | 15        | all     | The angle, in degrees, at which the watermark should be. Positive value will rotate anticolckwise, and vice versa. A value between -90 and 90 is required, and a value between -45 and 45 is suggested. |
 | `color`         | #000000   | all     | The color of watermark text in hex format.                   |
-| `opacity`       | 0.1       | all     | The opacity of color.  A value between 0 and 1 up to two decimal places is required. |
+| `opacity`       | 0.1       | all     | The opacity of color. A value between 0 and 1 up to two decimal places is required. |
 | `cols`          | 10        | all[^1] | # of watermark text columns.                                 |
 | `rows`          | 50        | all[^1] | # of watermark text rows.                                    |
 | `x-space-scale` | 4.0       | all     | Space scale of document base font size between watermark text columns. Value should be up to two decimal places. |
@@ -48,8 +48,8 @@ Options for this extension are listed as below:
 [^2]: Default value is `system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'`, which is compatible with common operation system.
 [^3]: Default value is empty, which will use `\normalfont` as default.
 
-> [!NOTE]
-> Enable CJK environment first for PDF output if you use Chinese character in watermark text.
+> [!CAUTION]
+> `pdflatex` PDF engine is not supported.
 
 ## Example
 

@@ -5,7 +5,7 @@ filters:
   - watermark
 watermark:
   text: "Watermark"
-  font-scale: 1.0
+  scale: 1.0
   angle: 15
   color: "#000000"
   opacity: 0.1

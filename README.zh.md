@@ -32,7 +32,7 @@ filters:
 | 参数              | 默认值    | 格式    | 说明                                                         |
 | ----------------- | --------- | ------- | ------------------------------------------------------------ |
 | `text`            | Watermark | all     | 水印文本。仅支持单行文本。                                   |
-| `font-scale`      | 1.0       | all     | 基于文档基础字体大小的水印文本字体比例，至多两位小数。例如：`font-scale = 1.5`，文档基础字体大小为 10pt，则水印文本字体大小为 15pt。 |
+| `scale`           | 1.0       | all     | 基于文档基础字体大小的水印文本字体比例，至多两位小数。例如：`scale: 1.5`，文档基础字体大小为 10pt，则水印文本字体大小为 15pt。 |
 | `angle`           | 15        | all     | 水印旋转的角度值。正数表示逆时针旋转，反之亦然。需介于 -90 至 90 之间，建议介于 -45 至 45 之间。 |
 | `color`           | #000000   | all     | 水印文本颜色 Hex 值。                                        |
 | `opacity`         | 0.1       | all     | 水印文本颜色不透明度。需介于 0 和 1 之间，至多两位小数。     |
@@ -48,8 +48,8 @@ filters:
 [^2]: 默认值为 `system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'`，与常见操作系统兼容。
 [^3]: 默认值为空，这将使用 `\normalfont` 作为默认值。
 
-> [!NOTE]
-> 针对 PDF 输出，如果在水印文本中使用中文字符请先启用 CJK 环境。
+> [!CAUTION]
+> 不支持 `pdflatex` PDF 引擎。
 
 ## 示例
 

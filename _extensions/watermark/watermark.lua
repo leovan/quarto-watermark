@@ -6,6 +6,7 @@ local function ensure_html_deps()
 end
 
 local function ensure_latex_deps()
+  quarto.doc.use_latex_package("fontspec")
   quarto.doc.use_latex_package("draftwatermark")
   quarto.doc.use_latex_package("xcolor")
   quarto.doc.use_latex_package("forloop")
@@ -38,7 +39,7 @@ local function html_watermark(options)
     </script>]],
     options.text,
     options.html_font,
-    options.font_scale,
+    options.scale,
     angle,
     options.color,
     options.opacity,
@@ -61,20 +62,20 @@ local function latex_watermark(options)
     font_command = "\\watermarkfont"
   end
 
-  local font_scale = tonumber(options.font_scale * 100)
-  local col_space_scale = tonumber(options.col_space_scale * 100)
-  local row_space_scale = tonumber(options.row_space_scale * 100)
-  local opacity = tonumber(options.opacity * 100)
+  local scale = tonumber(options.scale) * 100
+  local col_space_scale = tonumber(options.col_space_scale) * 100
+  local row_space_scale = tonumber(options.row_space_scale) * 100
+  local opacity = tonumber(options.opacity) * 100
 
   local script = string.format(
     [[
-    \definecolor{watermark}{HTML}{%s}
+    \definecolor{watermarkcolor}{HTML}{%s}
     %s
 
     \makeatletter
-    \newcommand*\watermarksize{\dimexpr\f@size pt * %d / 100 \relax}
-    \newcommand*\colspacesize{\dimexpr\f@size pt * %d / 100 \relax}
-    \newcommand*\rowspacesize{\dimexpr\f@size pt * %d / 100 \relax}
+    \newcommand*\watermarkfontsize{\dimexpr\f@size pt * %d / 100 \relax}
+    \newcommand*\watermarkcolspacesize{\dimexpr\f@size pt * %d / 100 \relax}
+    \newcommand*\watermarkrowspacesize{\dimexpr\f@size pt * %d / 100 \relax}
     \makeatother
 
     \DraftwatermarkOptions{
@@ -84,20 +85,20 @@ local function latex_watermark(options)
           \newcounter{col}
           \forloop{row}{0}{\value{row} < %d}{
             \forloop{col}{0}{\value{col} < %d}{
-              {%s %s}\hspace{\colspacesize}
+              {%s %s}\hspace{\watermarkcolspacesize}
             }
-            \\[\rowspacesize]
+            \\[\watermarkrowspacesize]
           }
         \end{tabular}
       },
-      fontsize=\watermarksize,
+      fontsize=\watermarkfontsize,
       angle=%f,
-      color=watermark!%d
+      color=watermarkcolor!%d
     }
     ]],
     color,
     font_define,
-    font_scale,
+    scale,
     col_space_scale,
     row_space_scale,
     options.rows,
@@ -113,7 +114,7 @@ end
 function Pandoc(doc)
   local options = {
     text = "Watermark",
-    font_scale = 1.0,
+    scale = 1.0,
     angle = 15,
     color = "#000000",
     opacity = 0.1,
@@ -133,8 +134,8 @@ function Pandoc(doc)
       options.text = pandoc.utils.stringify(watermark_meta["text"])
     end
 
-    if watermark_meta["font-scale"] then
-      options.font_scale = tonumber(pandoc.utils.stringify(watermark_meta["font-scale"]))
+    if watermark_meta["scale"] then
+      options.scale = tonumber(pandoc.utils.stringify(watermark_meta["scale"]))
     end
 
     if watermark_meta["angle"] then
