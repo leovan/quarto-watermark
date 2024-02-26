@@ -8,7 +8,10 @@
 
 🇺🇸 [README](README.md) | 🇨🇳 [中文说明](README.zh.md)
 
-A Quarto extension to add watermark for `html` and `pdf` format output. It's based on [X-Watermark](https://github.com/xpyjs/watermark) for `html` format, `draftwatermark` package for `pdf` format.
+A Quarto extension to add watermark for `html` and `pdf` document. It's based on [X-Watermark](https://github.com/xpyjs/watermark) for `html` document, `draftwatermark` package for `pdf` document.
+
+> [!CAUTION]
+> `pdflatex` PDF engine is not supported.
 
 ## Installing
 
@@ -27,29 +30,33 @@ filters:
   - watermark
 ```
 
-Options for this extension are listed as below:
+Parameters for this extension are listed as below:
 
-| option          | default   | format  | description                                                  |
-| --------------- | --------- | ------- | ------------------------------------------------------------ |
-| `text`          | Watermark | all     | Watermark text, single line supported only.                  |
-| `scale`         | 1.0       | all     | Watermark text font scale of document base font size. Value should be up to two decimal places. e.g. `scale: 1.5` and document base font size is 10pt, then the font size of watermark text will be 15pt. |
-| `angle`         | 15        | all     | The angle, in degrees, at which the watermark should be. Positive value will rotate anticolckwise, and vice versa. A value between -90 and 90 is required, and a value between -45 and 45 is suggested. |
-| `color`         | #000000   | all     | The color of watermark text in hex format.                   |
-| `opacity`       | 0.1       | all     | The opacity of color. A value between 0 and 1 up to two decimal places is required. |
-| `cols`          | 10        | all[^1] | # of watermark text columns.                                 |
-| `rows`          | 50        | all[^1] | # of watermark text rows.                                    |
-| `x-space-scale` | 4.0       | all     | Space scale of document base font size between watermark text columns. Value should be up to two decimal places. |
-| `y-space-scale` | 4.0       | all     | Space scale of document base font size between watermark text rows. Value should be up to two decimal places. |
-| `html-font`[^2] |           | html    | The font of watermark text for html format output.           |
-| `html-z-index`  | -1        | html    | Z order of watermark for html format output.                 |
-| `pdf-font`[^3]  |           | pdf     | The font of watermark text for pdf format output.            |
+| Parameters     | Default   | Format | Description                                 |
+| -------------- | --------- | ------ | ------------------------------------------- |
+| `text`         | Watermark | All    | Watermark text, single line supported only. |
+| `size`         | 1         | All    | Watermark font size.                        |
+| `angle`        | 15        | All    | Watermark angle in degrees.                 |
+| `color`        | #000000   | All    | Watermark color in Hex format.              |
+| `opacity`      | 0.1       | All    | Watermark opacity.                          |
+| `cols`         | 10        | `pdf`  | # of watermark columns.                     |
+| `rows`         | 50        | `pdf`  | # of watermark rows.                        |
+| `x-space`      | 4         | All    | Space size between watermark columns.       |
+| `y-space`      | 4         | All    | Space size between watermark rows.          |
+| `z-index`      | -1        | `html` | Stack order of watermark.                   |
+| `html-font`    |           | `html` | Watermark font.                             |
+| `pdf-font`     |           | `pdf`  | Watermark font.                             |
 
-[^1]: It's not working currently for HTML output due to upstream library problems.
-[^2]: Default value is `system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'`, which is compatible with common operation system.
-[^3]: Default value is empty, which will use `\normalfont` as default.
-
-> [!CAUTION]
-> `pdflatex` PDF engine is not supported.
+> [!NOTE]
+>
+> 1. `rem` is used as unit for all length, width and size for `html` document.
+> 2. `em` is used as unit for all length, width and size for `pdf` document.
+> 3. Positive `angle` will rotate counterclockwise, and vice versa. A value between -90 and 90 is required, and a value between -45 and 45 is suggested.
+> 4. `color` should be in Hex format.
+> 5. `opacity` should be between 0 and 1.
+> 6. All decimal values should keep two decimal places at most.
+> 7. `html-font` default value is `system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'`, which is compatible with common operation system.
+> 8. `pdf-font` default value is empty, which will use `\normalfont` as default font.
 
 ## Example
 

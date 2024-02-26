@@ -1,6 +1,7 @@
 local function ensure_html_deps()
   quarto.doc.add_html_dependency({
     name = "watermark",
+    version = "1.0.11",
     scripts = { "watermark.min.js" }
   })
 end
@@ -18,10 +19,9 @@ local function html_watermark(options)
   local script = string.format(
     [[<script>
     const baseFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
-
     const watermark = new XWatermark.XWatermark();
     watermark.init("%s", {
-      parentSelector: "html",
+      parentSelector: "body",
       prevent: true,
       observer: true,
       mode: "normal",
@@ -39,15 +39,15 @@ local function html_watermark(options)
     </script>]],
     options.text,
     options.html_font,
-    options.scale,
+    options.size,
     angle,
     options.color,
     options.opacity,
     options.cols,
     options.rows,
-    options.col_space_scale,
-    options.row_space_scale,
-    options.html_z_index
+    options.col_space,
+    options.row_space,
+    options.z_index
   )
   quarto.doc.include_text("after-body", script)
 end
@@ -62,21 +62,12 @@ local function latex_watermark(options)
     font_command = "\\watermarkfont"
   end
 
-  local scale = tonumber(options.scale) * 100
-  local col_space_scale = tonumber(options.col_space_scale) * 100
-  local row_space_scale = tonumber(options.row_space_scale) * 100
-  local opacity = tonumber(options.opacity) * 100
+  local opacity = tonumber(options.opacity * 100)
 
   local script = string.format(
     [[
-    \definecolor{watermarkcolor}{HTML}{%s}
+    \definecolor{watermark}{HTML}{%s}
     %s
-
-    \makeatletter
-    \newcommand*\watermarkfontsize{\dimexpr\f@size pt * %d / 100 \relax}
-    \newcommand*\watermarkcolspacesize{\dimexpr\f@size pt * %d / 100 \relax}
-    \newcommand*\watermarkrowspacesize{\dimexpr\f@size pt * %d / 100 \relax}
-    \makeatother
 
     \DraftwatermarkOptions{
       text={
@@ -85,26 +76,26 @@ local function latex_watermark(options)
           \newcounter{col}
           \forloop{row}{0}{\value{row} < %d}{
             \forloop{col}{0}{\value{col} < %d}{
-              {%s %s}\hspace{\watermarkcolspacesize}
+              {%s %s}\hspace{%fem}
             }
-            \\[\watermarkrowspacesize]
+            \\[%fem]
           }
         \end{tabular}
       },
-      fontsize=\watermarkfontsize,
+      fontsize=%fem,
       angle=%f,
-      color=watermarkcolor!%d
+      color=watermark!%d
     }
     ]],
     color,
     font_define,
-    scale,
-    col_space_scale,
-    row_space_scale,
     options.rows,
     options.cols,
     font_command,
     options.text,
+    options.col_space,
+    options.row_space,
+    options.size,
     options.angle,
     opacity
   )
@@ -114,16 +105,16 @@ end
 function Pandoc(doc)
   local options = {
     text = "Watermark",
-    scale = 1.0,
+    size = 1.0,
     angle = 15,
     color = "#000000",
     opacity = 0.1,
     cols = 10,
     rows = 50,
-    col_space_scale = 4.0,
-    row_space_scale = 4.0,
+    col_space = 4.0,
+    row_space = 4.0,
+    z_index = -1,
     html_font = "system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'",
-    html_z_index = -1,
     pdf_font = nil
   }
 
@@ -134,8 +125,8 @@ function Pandoc(doc)
       options.text = pandoc.utils.stringify(watermark_meta["text"])
     end
 
-    if watermark_meta["scale"] then
-      options.scale = tonumber(pandoc.utils.stringify(watermark_meta["scale"]))
+    if watermark_meta["size"] then
+      options.size = tonumber(pandoc.utils.stringify(watermark_meta["size"]))
     end
 
     if watermark_meta["angle"] then
@@ -158,20 +149,20 @@ function Pandoc(doc)
       options.rows = tonumber(pandoc.utils.stringify(watermark_meta["rows"]))
     end
 
-    if watermark_meta["col-space-scale"] then
-      options.col_space_scale = tonumber(pandoc.utils.stringify(watermark_meta["col-space-scale"]))
+    if watermark_meta["col-space"] then
+      options.col_space = tonumber(pandoc.utils.stringify(watermark_meta["col-space"]))
     end
 
-    if watermark_meta["row-space-scale"] then
-      options.row_space_scale = tonumber(pandoc.utils.stringify(watermark_meta["row-space-scale"]))
+    if watermark_meta["row-space"] then
+      options.row_space = tonumber(pandoc.utils.stringify(watermark_meta["row-space"]))
+    end
+
+    if watermark_meta["z-index"] then
+      options.z_index = pandoc.utils.stringify(watermark_meta["z-index"])
     end
 
     if watermark_meta["html-font"] then
       options.html_font = pandoc.utils.stringify(watermark_meta["html-font"])
-    end
-
-    if watermark_meta["html-z-index"] then
-      options.html_z_index = pandoc.utils.stringify(watermark_meta["html-z-index"])
     end
 
     if watermark_meta["pdf-font"] then

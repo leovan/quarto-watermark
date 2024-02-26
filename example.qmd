@@ -5,16 +5,16 @@ filters:
   - watermark
 watermark:
   text: "Watermark"
-  scale: 1.0
+  size: 1
   angle: 15
   color: "#000000"
   opacity: 0.1
   cols: 10
   rows: 50
-  col-space-scale: 4.0
-  row-space-scale: 4.0
+  col-space: 4
+  row-space: 4
+  z-index: -1
   html-font: "system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'"
-  html-z-index: -1
   pdf-font: "ETbb"
 format:
   html:
