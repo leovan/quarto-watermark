@@ -53,6 +53,7 @@ local function html_watermark(options)
 end
 
 local function latex_watermark(options)
+  local text = string.gsub(options.text, " ", "\\ ")
   local color = string.gsub(options.color, "#", "")
   local font_define = ""
   local font_command = ""
@@ -68,14 +69,14 @@ local function latex_watermark(options)
     [[
     \definecolor{watermark}{HTML}{%s}
     %s
+    \newcounter{watermarkrow}
+    \newcounter{watermarkcol}
 
     \DraftwatermarkOptions{
       text={
         \begin{tabular}{c}
-          \newcounter{row}
-          \newcounter{col}
-          \forloop{row}{0}{\value{row} < %d}{
-            \forloop{col}{0}{\value{col} < %d}{
+          \forloop{watermarkrow}{0}{\value{watermarkrow} < %d}{
+            \forloop{watermarkcol}{0}{\value{watermarkcol} < %d}{
               {%s %s}\hspace{%fem}
             }
             \\[%fem]
@@ -92,7 +93,7 @@ local function latex_watermark(options)
     options.rows,
     options.cols,
     font_command,
-    options.text,
+    text,
     options.col_space,
     options.row_space,
     options.size,
